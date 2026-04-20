@@ -8,7 +8,8 @@ src
 tests
 
 # config files
-.prettierrc
+.oxfmtrc.json
+.oxlintrc.json
 pnpm-lock.yaml
 tsconfig.json
 tsup.config.ts
