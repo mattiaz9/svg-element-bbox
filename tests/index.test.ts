@@ -387,6 +387,21 @@ describe("svgElementBbox", () => {
       ).toEqual([-1, -1, 11, 11])
     })
 
+    it("zero stroke-width overrides non-zero inherited stroke-width", () => {
+      expect(
+        svgElementBbox(
+          "rect",
+          {
+            width: "10",
+            height: "10",
+            stroke: "black",
+            "stroke-width": "0",
+          },
+          [{ stroke: "black", "stroke-width": "10" }],
+        ),
+      ).toEqual([0, 0, 10, 10])
+    })
+
     it("nearest ancestor wins when multiple layers set the same property", () => {
       expect(
         svgElementBbox(

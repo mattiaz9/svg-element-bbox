@@ -56,7 +56,8 @@ function mergeSvgStrokeInherited(
     const fromStyle = parseInlineStyleStroke(style)
     if (fromStyle.stroke !== undefined && fromStyle.stroke !== "") stroke = fromStyle.stroke
     if (fromStyle.strokeWidth !== undefined && fromStyle.strokeWidth !== "") {
-      strokeWidth = parseStrokeWidthValue(fromStyle.strokeWidth) ?? strokeWidth
+      const parsed = parseStrokeWidthValue(fromStyle.strokeWidth)
+      strokeWidth = parsed !== null ? parsed : strokeWidth
     }
   }
 
