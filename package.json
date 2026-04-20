@@ -1,0 +1,47 @@
+{
+  "name": "svg-element-bbox",
+  "version": "1.0.0",
+  "description": "SVG element bounding box calculator",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "svg",
+    "element",
+    "path",
+    "bounding",
+    "box",
+    "calculator"
+  ],
+  "author": "Mattia Dalzocchio <mattiadalzocchio@me.com>",
+  "homepage": "https://github.com/mattiaz9/svg-element-bbox#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattiaz9/svg-element-bbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mattiaz9/svg-element-bbox/issues"
+  },
+  "module": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "rm -rf dist && tsup src/index.ts --watch --config tsup.config.ts",
+    "build": "tsup src/index.ts --minify --config tsup.config.ts",
+    "test": "vitest",
+    "perf": "tsc --noEmit ./tests/perf.test.ts",
+    "lint": "eslint --ext .ts,.tsx src"
+  },
+  "dependencies": {
+    "svg-path-bbox": "2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.14.1",
+    "oxfmt": "0.45.0",
+    "oxlint": "1.60.0",
+    "oxlint-tsgolint": "0.21.1",
+    "tsup": "8.4.0",
+    "typescript": "5.9.3",
+    "vitest": "3.1.1"
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+}
