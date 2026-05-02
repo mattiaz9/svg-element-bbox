@@ -450,6 +450,75 @@ describe("svgElementBbox", () => {
     })
   })
 
+  describe("transform / CTM", () => {
+    it("applies a single ancestor translate to a centred circle", () => {
+      const bbox = svgElementBbox(
+        "circle",
+        { cx: "0", cy: "0", r: "4.291" },
+        [{ fill: "none", transform: "translate(50.291, 220.448)" }],
+      )
+      expect(bbox?.[0]).toBeCloseTo(50.291 - 4.291, 5)
+      expect(bbox?.[1]).toBeCloseTo(220.448 - 4.291, 5)
+      expect(bbox?.[2]).toBeCloseTo(50.291 + 4.291, 5)
+      expect(bbox?.[3]).toBeCloseTo(220.448 + 4.291, 5)
+    })
+
+    it("composes outer then inner translates (outermost group first in the array)", () => {
+      const bbox = svgElementBbox(
+        "circle",
+        { cx: "0", cy: "0", r: "1" },
+        [{ transform: "translate(10, 0)" }, { transform: "translate(0, 5)" }],
+      )
+      expect(bbox).toEqual([9, 4, 11, 6])
+    })
+
+    it("applies element transform after ancestor transforms", () => {
+      const bbox = svgElementBbox(
+        "circle",
+        { cx: "0", cy: "0", r: "1", transform: "translate(100, 0)" },
+        [{ transform: "translate(10, 0)" }],
+      )
+      expect(bbox).toEqual([109, -1, 111, 1])
+    })
+
+    it("parses chained transforms left-to-right (translate then scale)", () => {
+      const bbox = svgElementBbox("rect", {
+        x: "10",
+        y: "0",
+        width: "1",
+        height: "1",
+        transform: "translate(1, 0) scale(2)",
+      })
+      expect(bbox?.[0]).toBeCloseTo(22, 5)
+      expect(bbox?.[1]).toBeCloseTo(0, 5)
+      expect(bbox?.[2]).toBeCloseTo(24, 5)
+      expect(bbox?.[3]).toBeCloseTo(2, 5)
+    })
+
+    it("maps bbox corners through rotate()", () => {
+      const bbox = svgElementBbox("rect", {
+        x: "0",
+        y: "0",
+        width: "10",
+        height: "10",
+        transform: "rotate(90)",
+      })
+      expect(bbox?.[0]).toBeCloseTo(-10, 5)
+      expect(bbox?.[1]).toBeCloseTo(0, 5)
+      expect(bbox?.[2]).toBeCloseTo(0, 5)
+      expect(bbox?.[3]).toBeCloseTo(10, 5)
+    })
+
+    it("translates stroke-inflated bounds with the same matrix as geometry", () => {
+      expect(
+        svgElementBbox(
+          "rect",
+          { width: "10", height: "10", stroke: "black", "stroke-width": "4", transform: "translate(3, -2)" },
+        ),
+      ).toEqual([1, -4, 15, 10])
+    })
+  })
+
   describe("stroke inflation across geometry types", () => {
     it("inflates a circle bounding box", () => {
       expect(
